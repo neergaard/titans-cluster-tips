@@ -70,7 +70,36 @@ However, this is not strictly enforced, so if a project is using a type of data 
 Note that `$GROUP_HOME` is a place to store **raw** data, and that any type of preprocessed data that you need to access often in your modeling scripts should be placed on the `/scratch/` space!
 
 ## Starting a batch job
-Coming soon.
+In order to start a job on the cluster, you need to specify a batch script. 
+Let's look at the contents of the batch script `my_script.sh`:
+```bash
+#!/bin/bash
+
+#SBATCH --job-name=<job_name>
+#SBATCH --time=<time>
+#SBATCH -p {partition>
+#SBATCH -w {reservation>
+#SBATCH --cpus-per-task=<ncpus>
+#SBATCH --gres=gpu:<gpus>
+#SBATCH --mem=<memory>
+#SBATCH --output=<path_to_logs>.out
+#SBATCH --error=<path_to_logs>.err
+##################################################
+
+ # Change directory
+cd <path_to_directory>
+
+# Activate conda
+source $GROUP_HOME/miniconda3/bin/activate
+
+# Activate correct conda environment
+conda activate <conda_env>
+
+# Run command
+python <my_python_script>
+```
+By running `sbatch my_script.sh` from the login node, the script will submit your job with the given parameters.
+Here, no parameters or python commands are actually given, you need to modify to your use case!
 
 ## Setting up VSCode for remote development
 It’s possible to develop and debug code directly on `titans` through the VS Code extension ‘Remote – SSH’.
